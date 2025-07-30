@@ -102,3 +102,6 @@ if (poppedData != -1) {
     return 0;
 }
 ```
+# Stack Midterm Quiz
+
+![[Premid](Images/Premid.png)
