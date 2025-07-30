@@ -104,4 +104,4 @@ if (poppedData != -1) {
 ```
 # Stack Midterm Quiz
 
-![[Premid](Images/Premid.png)
+![Premid](Images/Premid.png)
