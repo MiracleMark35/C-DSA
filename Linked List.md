@@ -26,7 +26,7 @@ void insertLast(Node** head, int elem) {
     Node** p = head;
     
     // Traverse to the last node using PPN
-    while (*p != NULL) {
+    while (*p != NULL) { 
         p = &(*p)->link;
     }
 
@@ -56,6 +56,125 @@ int main() {
     return 0;
 }
 ```
+
+### Pointer to Pointer to Node (PPN) Traversal Partt 2
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+
+typedef struct node {
+    int elem;
+    struct node* link;
+} *Node;   // Shorter syntax (no need to write *)
+
+Node createNode(int data){
+    Node newNode = (Node)malloc(sizeof(Node));
+    newNode->elem = data;
+    newNode->link = NULL;
+    return newNode;
+}
+
+void insertBeginning(Node* head, int data){
+    Node temp = createNode(data);
+    temp->link = *head;
+    *head = temp;
+    
+}
+
+void deleteBeginning(Node* head){
+    *head = (*head)->link; // MISTAKE !!!  *head  =  &(*head)->link → is the address of the link field itself, not the node it points to
+    
+    // *head = &(*head)->link;  will update the head to the next node 
+}
+
+void insertLast(Node* head, int data){
+    Node* temp =  head;    
+    
+    // head is a Node (struct node*)
+
+    // temp is a Node* (struct node**)
+
+    // You're saying: "let temp point to head" — which is correct for modifying the list
+    
+    
+    
+    while(*temp != NULL){    // *temp gives us the actual node pointer,     //*temp != NULL checks if there is a node there.
+        temp = &(*temp)->link;   //  &(*temp)->link gives us the address of the next link field — perfect for insertion.
+    } //(*temp)->link accesses the link field of that node 
+    //&(*temp)->link takes the address of that link field.
+    *temp = createNode(data);   //*temp is the actual pointer to the current node (Node).
+} //*temp is the pointer at the current position in the list (which is NULL at this point, the end).
+
+    //*temp = createNode(data); sets that NULL link to point to the new node.
+
+
+void displayList(Node head) {
+    Node p = head;
+    while (p != NULL) {
+        printf("%d -> ", p->elem);
+        p = p->link;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    Node head = NULL;  // No header cell, head points to the first node     // Node* head = NULL; // This is a pointer to a Node* (so double pointer in disguise!)
+                                                                            // Node* head = NULL;  You are passing a copy of the head pointer into the function.
+                                                                            // Node* head = NULL;  You are passing a copy of the head pointer into the function.
+                                                                            // insertLast(head, 30);  // Passing just a copy of the pointer
+    // Insert elements at the end
+    insertLast(&head, 10);  // You pass the address of head, so changes reflect in main()
+    insertLast(&head, 20);
+    insertLast(&head, 30);   
+    insertBeginning(&head, 5);
+    deleteBeginning(&head);
+    displayList(head); //No need for &head because you're not modifying the pointer or the structure of the list.
+
+    return 0;
+}
+
+
+```
+# Why do we use this PPN style?
+ Using Node* temp (i.e., pointer to a pointer to node):
+
+Makes it easy to insert at the head of the list or anywhere without special cases.
+
+Avoids needing a "prev" pointer or manual head handling.
+
+It’s a powerful trick in pointer-based linked list manipulation.
+
+
+| Expression               | Meaning                                            | Correct? |
+| ------------------------ | -------------------------------------------------- | -------- |
+| `(*head)->link`          | The next node                                      | ✅ Yes    |
+| `&(*head)->link`         | Address of the `link` field (i.e. Node\*\*)        | ❌ No     |
+| `*head = (*head)->link`  | Head now points to the next node                   | ✅ Yes    |
+| `*head = &(*head)->link` | Invalid type — trying to assign address of pointer | ❌ No     |
+
+
+
+| Expression       | Meaning                                                 |
+| ---------------- | ------------------------------------------------------- |
+| `head`           | pointer to the first node (`0x3000`)                    |
+| `*head`          | the actual Node struct at `0x3000`                      |
+| `head->link`     | the next node (`NULL` in this case)                     |
+| `(*head).link`   | same as above (another syntax)                          |
+| `&head`          | address of the pointer variable itself (e.g., `0x4000`) |
+| `&(*head)->link` | address of the `link` field **inside the node**         |
+
+
+
+| Expression       | Value / Address                   | Can it update the actual node? | Explanation                                                                                                                        |
+| ---------------- | --------------------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `head`           | `0x3000`                          | ❌ No                           | This is just the pointer itself. If you assign `head = NULL;`, it only changes the pointer locally, **not the node** it points to. |
+| `*head`          | Struct at `0x3000`                | ✅ Yes                          | This is the **node itself**. You can update its contents like `(*head).elem = 20;`                                                 |
+| `head->link`     | `NULL` (or next node)             | ✅ Yes                          | You can write `head->link = newNode;` to change what this node points to next.                                                     |
+| `&head`          | Address of the pointer (`0x4000`) | ✅ Yes, but indirect            | This is used when you want to **modify the pointer itself** (e.g., change where `head` points), like in `insertLast(&head, ...)`   |
+| `(*head).link`   | Same as `head->link`              | ✅ Yes                          | Just another way to access the `link` field.                                                                                       |
+| `&(*head)->link` | Address inside node               | ✅ Technically                  | Gives the address of the `link` field, which you can use if you want a pointer to it specifically.                                 |
+
 ## LOOK AHEAD WIHOUT HEAD
 #### Or MY FAVORITE
 ```cpp
