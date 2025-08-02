@@ -333,6 +333,37 @@ void deleteAll(Node** head, int elem) {
 ```
 
 ### MAKENULL(L)
+
+```c
+void deleteAll(Node** head) {
+Node** current =  head; // ❌ This (confusing and incorrect here): // but can work
+                        //current becomes a pointer to the pointer to the head node (i.e. Node**).
+
+                        //That's useful when you're modifying the list structure, like in insertLast() or deleteElem().
+
+                        //But in deleteAll(), you're not modifying pointer references — you're just walking through the list and freeing each node.
+            
+
+    Node* current = *head;  // ✅   //*head is the actual pointer to the first node.
+                            // current is used to walk through and free each Node*.
+
+    while (current != NULL) {
+        Node* temp = current;
+        current = current->link;
+        free(temp);  // ✅ Free each node
+    }
+    *head = NULL;
+}
+
+```
+# Summary
+
+| Operation                                           | Use `Node*` or `Node**`? | Why                                         |
+| --------------------------------------------------- | ------------------------ | ------------------------------------------- |
+| Traversing and freeing all nodes (`deleteAll`)      | `Node*` ✅                | Just walk and free                          |
+| Inserting or deleting specific nodes (modify links) | `Node**` ✅               | Need to update links via pointer-to-pointer |
+
+
 ```cpp
 void MAKENULL(List *L) {
     Node *current = *L;
