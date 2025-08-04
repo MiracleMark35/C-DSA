@@ -377,30 +377,6 @@ void MAKENULL(List *L) {
     *L = NULL;
 }
 ```
-### REMOVEDUPLICATE(head)
-```cpp
-void removeDuplicates(Node* head) {
-    Node *p, *prev, *q;
-
-    p = head;
-    while (p != NULL && p->next != NULL) {
-        prev = p;
-        q = p->next;
-        while (q != NULL) {
-            if (p->data == q->data) {
-                // Duplicate node found; remove it
-                prev->next = q->next;
-                free(q);  // Free the duplicate node
-                q = prev->next;  // Move q to the next node
-            } else {
-                prev = q;
-                q = q->next;
-            }
-        }
-        p = p->next;
-    }
-}
-```
 
 
 ### PPN MUST USE
