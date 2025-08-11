@@ -320,7 +320,7 @@ void displayV2    (STACK* main){
     printf("[%d]\n", temp.elems[temp.top]);
     pop(main);
   }
-  // Loop again to put all elements in temp stack to main() stack
+  /// Loop again to put all elements in temp stack to main() stack
   for (x = 0 ; temp.top != -1 ; x++){
     push(main, top(temp));
     pop(&temp);
