@@ -176,7 +176,7 @@ It’s a powerful trick in pointer-based linked list manipulation.
 | `&(*head)->link` | Address inside node               | ✅ Technically                  | Gives the address of the `link` field, which you can use if you want a pointer to it specifically.                                 |
 
 ## LOOK AHEAD WIHOUT HEAD
-#### Or MY FAVORITE
+#### 
 ```cpp
 #include<stdio.h>
 #include<stdlib.h>
@@ -314,47 +314,6 @@ int main() {
 
     return 0;
 }
-```
-### DELETE ALL OCCURECENCES
-```cpp
-void deleteAll(Node** head, int elem) {
-    Node** p = head;
-    
-    while (*p != NULL) {
-        if ((*p)->elem == elem) {
-            Node* temp = *p;
-            *p = (*p)->link; // Remove the node by updating the pointer
-            free(temp);       // Free the removed node
-        } else {
-            p = &(*p)->link; // Move to the next node only if no deletion happened
-        }
-    }
-}
-```
-
-### MAKENULL(L)
-
-```c
-void deleteAll(Node** head) {
-Node** current =  head; // ❌ This (confusing and incorrect here): // but can work
-                        //current becomes a pointer to the pointer to the head node (i.e. Node**).
-
-                        //That's useful when you're modifying the list structure, like in insertLast() or deleteElem().
-
-                        //But in deleteAll(), you're not modifying pointer references — you're just walking through the list and freeing each node.
-            
-
-    Node* current = *head;  // ✅   //*head is the actual pointer to the first node.
-                            // current is used to walk through and free each Node*.
-
-    while (current != NULL) {
-        Node* temp = current;
-        current = current->link;
-        free(temp);  // ✅ Free each node
-    }
-    *head = NULL;
-}
-
 ```
 
 # Summary
