@@ -378,3 +378,75 @@ int main(){
 }
 
 ```
+
+### Stack Linked List Militante
+
+```c
+#include<stdio.h>
+#include<stdbool.h>
+#include<stdlib.h>
+
+
+typedef struct node{
+   int data;
+   struct node* next;
+} node;
+
+typedef struct {
+    node* head;
+}Stack;
+
+void initStack(Stack* s){
+   s->head = NULL;
+}
+
+bool isEmpty(Stack s){
+    return s.head == NULL;
+}
+
+
+void push(Stack* s, int new_data){
+   node* newNode = (node*)malloc(sizeof(node));
+   newNode->data = new_data;
+   newNode->next = s->head;
+   s->head = newNode;
+}
+
+int pop(Stack* s){
+   if(!isEmpty(*s)){
+       int val = s->head->data;
+       node* temp = s->head;
+       s->head = temp->next; // or  s->head = s->head->next;
+       free(temp);
+       return val;
+   }else{
+        printf("Stack underflow!\n");
+        return -1;
+   }
+}
+
+int peek(Stack s){
+   if(isEmpty(s)){
+      return -1;
+   }
+    return s.head->data;
+}
+
+
+int main(){
+    
+   Stack s;
+    initStack(&s);
+
+    push(&s, 10);
+    push(&s, 20);
+    push(&s, 30);
+
+    printf("Top element: %d\n", peek(s));  // 30
+    printf("Popped: %d\n", pop(&s));       // 30
+    printf("Popped: %d\n", pop(&s));       // 20
+    printf("Top element: %d\n", peek(s));  // 10
+    return 0;
+}
+
+```
