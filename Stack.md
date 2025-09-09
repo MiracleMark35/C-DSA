@@ -354,42 +354,90 @@ void push       (STACK *main, int newData){
 }
 ```
   
-```cpp
-// Function to insert a new element before a specific value in the stack
-void InsertBefore(Stack* top, int target_data, int new_data) {
-    if (IsEmpty(*top)) {
-        printf("Stack is empty. Cannot insert before %d.\n", target_data);
-        return;
-    }
+### Stack Array Militante
+```c
+#include<stdio.h>
+#include<stdbool.h>
 
-    // Special case: if inserting before the top element
-    if ((*top)->data == target_data) {
-        Push(top, new_data); // Insert at the top
-        return;
-    }
+#define MAX 5
 
-    Stack newNode = (Stack)malloc(sizeof(struct Node));
-    if (!newNode) {
-        printf("Memory allocation failed\n");
-        return;
-    }
-    newNode->data = new_data;
+typedef struct {
+    int data[MAX];
+    int top;
+} Stack;
 
-    Stack* trav = top;  // Pointer to pointer for traversing
+void initStack(Stack* s){
+    s->top = -1;
+}
 
-    // Use a for loop to find the node before the target_data
-    for (; *trav != NULL && (*trav)->data != target_data; trav = &(*trav)->next) {
-        // Looping through the stack
-    }
+bool isEmpty(Stack s){
+    return s.top == -1;
+}
 
-    // If we found the target_data, insert the new node before it
-    if (*trav != NULL) {
-        newNode->next = *trav; // Link new node to the target
-        *trav = newNode;       // Update the link to point to the new node
-    } else {
-        printf("Target data %d not found in the stack.\n", target_data);
-        free(newNode); // Free the allocated memory if not inserted
+bool isFull(Stack s){
+    return s.top == MAX - 1;
+}
+
+void push(Stack* s, int new_data){
+    if(!isFull(*s)){
+         s->data[++(s->top)] = new_data;
+    }else{
+        printf("Stack is Full\n");
     }
 }
-```
 
+int pop(Stack* s){
+    if(!isEmpty(*s)){
+    int temp = s->data[(s->top)--];
+     return temp;
+    }else{
+        printf("Stack is not Empty\n");
+    }
+}
+
+int peek(Stack s){
+     int top = -1;
+    if(!isEmpty(s)){
+      top = s.data[s.top];
+      return top;
+    }else{
+        return top;
+        printf("Stack is not Empty\n");
+    }
+   
+}
+
+int main(){
+    
+    Stack myStack;
+    
+    initStack(&myStack);
+    printf("%s\n", isEmpty(myStack) ? "Stack is Empty" : "Stack is not Empty");
+    printf("%s\n", isFull(myStack) ? "Stack is Full" : "Stack is not yet Full");
+    
+    push(&myStack, 10);
+    push(&myStack, 20);
+    push(&myStack, 30);
+    push(&myStack, 40);
+    push(&myStack, 50);
+    printf("The Deleted Element is: %d\n", pop(&myStack));
+    printf("The Deleted Element is: %d\n", pop(&myStack));
+    printf("The Deleted Element is: %d\n", pop(&myStack));
+    printf("The Top Element is: %d\n",peek(myStack));
+      printf("The Deleted Element is: %d\n", pop(&myStack));
+        printf("The Deleted Element is: %d\n", pop(&myStack));
+            printf("The Top Element is: %d\n",peek(myStack));
+    // printf("The Top Element is: %d\n",peek(myStack));
+    // printf("The Deleted Element is: %d\n", pop(&myStack));
+    // printf("The Top Element is: %d\n",peek(myStack));
+    // push(&myStack, 60);
+    // printf("The Top Element is: %d\n",peek(myStack));
+    // push(&myStack, 70);
+    // printf("The Top Element is: %d\n",peek(myStack));
+    //  push(&myStack, 70);
+    //   push(&myStack, 70);
+    //   push(&myStack, 70);
+    return 0;
+}
+
+```
