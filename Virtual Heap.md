@@ -124,22 +124,22 @@ void deleteLast(VirtualHeap *VH, List *L) {
         if (VH->Node[*L].next == -1) {
             // Case 1: Only one node in the list
             temp = *L;
-            *L = -1;  
+            *L = -1;
         } else {
             // Case 2: More than one node
-            for (trav = L; VH->Node[*trav].next != -1; trav = &VH->Node[*trav].next) {
-                if (VH->Node[VH->Node[*trav].next].next == -1) {
-                    break; // stop when the *next node* is the last
-                }
+            for (trav = L; VH->Node[*trav].next != -1 && VH->Node[VH->Node[*trav].next].next != -1; 
+                 trav = &VH->Node[*trav].next) {
+                // loop runs until *trav points to the second-to-last node
             }
             temp = VH->Node[*trav].next;   // last node index
-            VH->Node[*trav].next = -1;     // unlink it
+            VH->Node[*trav].next = -1;     // unlink last node
         }
         dealloc(VH, temp);  // return to free list
     } else {
         printf("List is empty.\n");
     }
 }
+
 
  
 void InitializeList(List* head) {
