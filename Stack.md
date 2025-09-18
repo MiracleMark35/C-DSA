@@ -450,3 +450,107 @@ int main(){
 }
 
 ```
+
+# Stack Sort
+```c
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+typedef struct node {
+    int data;
+    struct node* next;
+} *Stack;
+
+void initStack(Stack* s) {
+    *s = NULL;   // initialize stack to empty
+}
+
+bool isEmpty(Stack s) {
+    return s == NULL;
+}
+
+void push(Stack* s, int new_data) {
+    Stack newNode = (Stack)malloc(sizeof(struct node));
+    newNode->data = new_data;
+    newNode->next = *s;   // new node points to old top
+    *s = newNode;         // update top
+}
+
+int pop(Stack* s) {
+    if (!isEmpty(*s)) {
+        int val = (*s)->data;
+        Stack temp = *s;
+        *s = (*s)->next;
+        free(temp);
+        return val;
+    } else {
+        printf("Stack underflow!\n");
+        return -1;
+    }
+}
+
+int peek(Stack s) {
+    if (isEmpty(s)) {
+        return -1;
+    }
+    return s->data;
+}
+
+Stack sorted(Stack s){
+    Stack sorted = NULL;
+    
+    while(s != NULL){
+        Stack temp = s;
+        s = s->next;
+        
+        Stack newNode = malloc(sizeof(struct node));
+        newNode->data = temp->data;
+        newNode->next = NULL;
+      //   free(temp);
+        if(sorted == NULL || sorted->data >= newNode->data){
+            newNode->next = sorted;
+            sorted = newNode;
+        }else{
+            Stack* trav;
+            for(trav = &sorted; *trav != NULL && (*trav)->data <= newNode->data; trav = &(*trav)->next){}
+            
+            newNode->next = *trav;
+            *trav = newNode;
+            
+        }
+    }
+    return sorted;
+}
+
+void display(Stack s){
+    Stack trav = s;
+    printf("DISPLAY: ");
+    while(trav != NULL){
+        printf("%d ", trav->data);
+        trav = trav->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    Stack s;
+    initStack(&s);
+    push(&s, 8);
+    push(&s, 10);
+      push(&s, 5);
+    push(&s, 20);
+        push(&s, 25);
+    push(&s, 30);
+     push(&s, 1);
+
+display(s);
+    
+    Stack sort = sorted(s);
+   display(sort);
+   
+   display(s);
+    return 0;
+}
+
+```
