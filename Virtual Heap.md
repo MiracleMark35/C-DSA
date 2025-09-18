@@ -116,29 +116,28 @@ void deleteFirst(VirtualHeap *VH, List *L) {
     }
 }
 
-void deleteLast(VirtualHeap *VH, List *L) {
-    if (*L != -1) {   // list not empty
+void deleteLast(VirtualHeap *VH, List *L){
+    if (*L != -1) { 
         List temp;
-        List *trav;
+        List* trav;
 
-        if (VH->Node[*L].next == -1) {
-            // Case 1: Only one node in the list
+        if (VH->Node[*L].next == -1) {  
+            // Only one element
             temp = *L;
-            *L = -1;
+            *L = -1;  
         } else {
-            // Case 2: More than one node
-            for (trav = L; VH->Node[*trav].next != -1 && VH->Node[VH->Node[*trav].next].next != -1; 
-                 trav = &VH->Node[*trav].next) {
-                // loop runs until *trav points to the second-to-last node
-            }
-            temp = VH->Node[*trav].next;   // last node index
-            VH->Node[*trav].next = -1;     // unlink last node
+            // More than one element
+            for (trav = L; VH->Node[VH->Node[*trav].next].next != -1;
+                 trav = &VH->Node[*trav].next) {}
+            temp = VH->Node[*trav].next;  
+            VH->Node[*trav].next = -1;  
         }
-        dealloc(VH, temp);  // return to free list
+        dealloc(VH, temp);  
     } else {
         printf("List is empty.\n");
     }
 }
+
 
 
  
