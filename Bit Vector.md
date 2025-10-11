@@ -381,6 +381,19 @@ void difference(Set A, Set B, Set C) {
     }
 }
 
+void displayBitVersion(Set set) {
+    printf("{");
+    bool first = true;
+    for (int i = 0; i < ARRAY_SIZE; i++) {
+             if (!first) printf(", ");
+       set[i] ? printf("1") : printf("0");
+            first = false;
+        
+    }
+    printf("}\n");
+}
+
+
 
 void display(Set set) {
     printf("{");
