@@ -66,92 +66,6 @@ int Member(Dictionary dict, int key) {
     return 0; // Key not found
 }
 
-// Function to display the contents of the dictionary
-void display(Dictionary dict) {
-    for (int i = 0; i < MAX; i++) {
-        List current = dict[i];
-        printf("Index %d: ", i);
-        for (; current != NULL; current = current->next) {
-            printf("%d -> ", current->data);
-        }
-        printf("NULL\n");
-    }
-}
-
-// Example usage
-int main() {
-    Dictionary dict;
-    initialize(dict);
-
-    Insert(dict, 5);
-    Insert(dict, 15);
-    Insert(dict, 25);
-    Insert(dict, 35);
-
-    printf("Dictionary after insertions:\n");
-    display(dict);
-
-    printf("Checking membership of 15: %d\n", Member(dict, 15));
-    printf("Checking membership of 10: %d\n", Member(dict, 10));
-
-    Delete(dict, 15);
-    printf("Dictionary after deleting 15:\n");
-    display(dict);
-
-    Delete(dict, 100); // Trying to delete a non-existing key
-
-    return 0;
-}
-```
-  
-```cpp
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef struct Node {
-    int data;
-    struct Node* next;
-} *List;
-
-#define MAX 10
-
-typedef List Dictionary[MAX];
-
-// Hash function to determine the index for a given key
-int hash(int key) {
-    return key % MAX;
-}
-
-// Initialize the dictionary
-void initialize(Dictionary dict) {
-    for (int i = 0; i < MAX; i++) {
-        dict[i] = NULL;
-    }
-}
-
-// Insert a key into the dictionary
-void Insert(Dictionary dict, int key) {
-    int index = hash(key);
-    List newNode = (List)malloc(sizeof(struct Node));
-    newNode->data = key;
-    newNode->next = dict[index];
-    dict[index] = newNode;
-}
-
-// Function to display the contents of the dictionary
-void display(Dictionary dict) {
-    for (int x = 0; x < MAX; x++) {
-        List trav = dict[x];
-        if (trav != NULL) {
-            printf("Index %d: ", x);
-            for (; trav != NULL; trav = trav->next) {
-                printf("%d ", trav->data);
-            }
-            printf("\n");
-        }
-    }
-}
-
 // Function to insert a node into a sorted linked list
 void sortedInsert(List* head, int newData) {
     List newNode = (List)malloc(sizeof(struct Node));
@@ -187,6 +101,19 @@ Dictionary* insertSorted(Dictionary main) {
     return sortedDict;
 }
 
+
+// Function to display the contents of the dictionary
+void display(Dictionary dict) {
+    for (int i = 0; i < MAX; i++) {
+        List current = dict[i];
+        printf("Index %d: ", i);
+        for (; current != NULL; current = current->next) {
+            printf("%d -> ", current->data);
+        }
+        printf("NULL\n");
+    }
+}
+
 // Example usage
 int main() {
     Dictionary dict;
@@ -196,22 +123,27 @@ int main() {
     Insert(dict, 15);
     Insert(dict, 25);
     Insert(dict, 35);
-    Insert(dict, 2);
-    Insert(dict, 3);
-    Insert(dict, 17);
-    Insert(dict, 9);
 
-    printf("Dictionary before sorting:\n");
+    printf("Dictionary after insertions:\n");
     display(dict);
 
+    printf("Checking membership of 15: %d\n", Member(dict, 15));
+    printf("Checking membership of 10: %d\n", Member(dict, 10));
+
+    Delete(dict, 15);
+    printf("Dictionary after deleting 15:\n");
+    display(dict);
+
+    Delete(dict, 100); // Trying to delete a non-existing key
     Dictionary* sortedDict = insertSorted(dict);
     printf("Sorted Dictionary:\n");
     display(*sortedDict);
 
-    // Free allocated memory (not shown for simplicity)
-
     return 0;
 }
+```
+
+ 
 ```
 ### OPEN HASHING 
 ```cpp
