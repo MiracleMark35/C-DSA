@@ -181,18 +181,21 @@ void insertUniqueSorted(Dictionary D, int elem){
   int hashValue = hash(D, elem);
     
 
-   if( D[hashValue] == NULL || D[hashValue]->data > elem){ // insertFirst
-     newNode->next = D[hashValue];
-     D[hashValue] = newNode;
-   }else{ // traverse
-     SET* trav;
-     for(trav = &D[hashValue] ; *trav != NULL && (*trav)->data < elem ; 
-      trav = &(*trav)->next ){}
+   // if( D[hashValue] == NULL || D[hashValue]->data > elem){ // insertFirst
+   //   newNode->next = D[hashValue];
+   //   D[hashValue] = newNode;
+   // }else{ // traverse
+   //   SET* trav;
+   //   for(trav = &D[hashValue] ; *trav != NULL && (*trav)->data < elem ; 
+   //    trav = &(*trav)->next ){}
      
-       newNode->next = *trav;
-      *trav = newNode;
-    }
-   
+   //     newNode->next = *trav;
+   //    *trav = newNode;
+   //  }
+    SET* trav;
+    for(trav = &D[hashValue]; *trav != NULL && (*trav)->data < elem; trav = &(*trav)->next){}
+     newNode->next = *trav;
+    *trav = newNode;
   printf("Inserted %d in the dictionary.\n", elem);
   }else{
     printf("Element %d is already in the dictionary.\n",elem);
