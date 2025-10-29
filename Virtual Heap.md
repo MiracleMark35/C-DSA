@@ -184,3 +184,146 @@ int main() {
     return 0;
 }
 ```
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_HEAP 20
+#define EMPTY 0
+#define DELETED -1
+
+typedef struct {
+    int elem;
+    int next;
+} NodeType;
+
+typedef struct {
+    NodeType Node[MAX_HEAP];
+    int avail;
+} VirtualHeap;
+
+typedef struct {
+    VirtualHeap VH;
+    NodeType Node[MAX_HEAP/2];
+} Dictionary;
+
+// --- Virtual Heap ---
+void initializeVirtualHeap(VirtualHeap *VH) {
+    for(int i=MAX_HEAP/2;i<MAX_HEAP;i++){
+        VH->Node[i].next=i+1;
+        VH->Node[i].elem=EMPTY; // optional
+    }
+    VH->Node[MAX_HEAP-1].next= -1;
+    VH->avail = MAX_HEAP/2;
+}
+
+int allocspace(VirtualHeap *VH){
+    int temp=VH->avail;
+    if(temp!=-1){
+        VH->avail = VH->Node[temp].next;
+    } 
+    return temp;
+}
+
+void dealloc(VirtualHeap *VH,int index){
+    
+    if(index >= 0 &&  index < MAX_HEAP){
+    VH->Node[index].next = VH->avail;
+    VH->avail= index ;
+    
+    VH->Node[index].elem=EMPTY; //optional
+    }
+
+}
+
+// --- Dictionary ---
+void InitializeDICT(Dictionary *D){
+    for(int i=0;i< MAX_HEAP/2 ;i++){
+        D->Node[i].elem=EMPTY;
+        D->Node[i].next=-1; // optional
+    }
+    initializeVirtualHeap(&D->VH);
+}
+
+int hash(int key){ return key % (MAX_HEAP/2); }
+
+void insert(Dictionary *D,int key){
+    
+    int idx=hash(key);
+    
+    if(D->Node[idx].elem==EMPTY || D->Node[idx].elem==DELETED){
+        D->Node[idx].elem=key;
+        D->Node[idx].next=-1;
+    } else {
+        int newNode= allocspace(&D->VH);
+        if(newNode==-1){ printf("No space!\n"); return; }
+        D->VH.Node[newNode].elem=key;
+        D->VH.Node[newNode].next=D->Node[idx].next;
+        D->Node[idx].next=newNode;
+    }
+}
+int search(Dictionary D, int key){
+    int hashV = hash(key);
+
+    // check main array first
+    if(D.Node[hashV].elem == key) return 1;
+
+    // traverse synonyms in the virtual heap
+    int next = D.Node[hashV].next;
+    while(next != -1){
+        if(D.VH.Node[next].elem == key) break;  // check in virtual heap
+        next = D.VH.Node[next].next;
+    }
+
+    return next != -1 ? 1 : -1;
+}
+
+
+// --- DELETE ---
+void delete(Dictionary *D, int key){
+    int idx = hash(key);
+
+ 
+}
+
+
+// --- DISPLAY ---
+void displayDictionary(Dictionary *D){
+    printf("Index | Elem | Next\n");
+    printf("------------------\n");
+    for(int i=0;i<MAX_HEAP/2;i++){
+        printf("%5d | %4d | %4d\n", i,
+               D->Node[i].elem==EMPTY ? 0 : D->Node[i].elem,
+               D->Node[i].next);
+    }
+    printf("---- Synonyms ----\n");
+    for(int i=MAX_HEAP/2;i<MAX_HEAP;i++){
+        if(D->VH.Node[i].elem!=EMPTY)
+            printf("%5d | %4d | %4d\n", i,
+                   D->VH.Node[i].elem,
+                   D->VH.Node[i].next);
+    }
+    printf("Next available heap node: %d\n", D->VH.avail);
+}
+
+// --- MAIN ---
+int main(){
+    Dictionary D;
+    InitializeDICT(&D);
+
+    insert(&D, 3);
+    insert(&D, 9);
+    insert(&D, 4);
+    insert(&D, 53);
+    insert(&D, 89);
+    insert(&D, 10);
+    insert(&D, 13);
+    
+    displayDictionary(&D);
+
+    
+
+    return 0;
+}
+
+```
