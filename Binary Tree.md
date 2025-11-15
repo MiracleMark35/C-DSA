@@ -60,7 +60,7 @@ int main (){
     return 0;
 }
 ```
-Binary tree Search
+Binary tree Search SUS
 
 ```cpp
 #include <stdio.h>
