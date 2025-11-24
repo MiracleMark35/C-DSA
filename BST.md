@@ -212,9 +212,9 @@ int main() {
 
 // Binary Search Tree Node definition
 typedef struct node {
-    int elem;              // Element value
-    struct node* LC;      // Pointer to left child
-    struct node* RC;      // Pointer to right child
+  int elem;              // Element value
+  struct node* LC;       // Pointer to left child
+  struct node* RC;       // Pointer to right child
 } *BST;
 
 // Function prototypes
@@ -227,171 +227,191 @@ void Postorder(BST main);
 void DeleteMin(BST *main);
 void DeleteMax(BST *main);
 void Delete(BST *main, int node);
+void FreeBST(BST main); // Free all nodes at the end
 
 int main() {
-    BST Mango;
-    Init(&Mango);  // Initialize the BST
+  BST Mango;
+  Init(&Mango);  // Initialize the BST
 
-    // Insert values into the BST
-    Insert(10, &Mango);
-    Insert(5, &Mango);
-    Insert(14, &Mango);
-    Insert(7, &Mango);
-    Insert(12, &Mango);
-    Insert(18, &Mango);
-    Insert(11, &Mango);
-    Insert(15, &Mango);
+  // Insert values into the BST
+  Insert(10, &Mango);
+  Insert(5, &Mango);
+  Insert(14, &Mango);
+  Insert(7, &Mango);
+  Insert(12, &Mango);
+  Insert(18, &Mango);
+  Insert(11, &Mango);
+  Insert(15, &Mango);
 
-    // Display the BST in different orders
-    printf("Preorder:\n");
-    Preorder(Mango);
-    printf("\nInorder:\n");
-    Inorder(Mango);
-    printf("\nPostorder:\n");
-    Postorder(Mango);
+  // Display the BST in different orders
+  printf("Preorder:\n");
+  Preorder(Mango);
+  printf("\nInorder:\n");
+  Inorder(Mango);
+  printf("\nPostorder:\n");
+  Postorder(Mango);
 
-    // Check for membership of specific values
-    printf("\nMember %d = %d\n", 5, Member(5, Mango));
-    printf("Member %d = %d\n", 15, Member(15, Mango));
-    printf("Member %d = %d\n", 20, Member(20, Mango));
-    printf("Member %d = %d\n", 10, Member(10, Mango));
+  // Check for membership of specific values
+  printf("\nMember %d = %d\n", 5, Member(5, Mango));
+  printf("Member %d = %d\n", 15, Member(15, Mango));
+  printf("Member %d = %d\n", 20, Member(20, Mango));
+  printf("Member %d = %d\n", 10, Member(10, Mango));
 
-    // Delete the minimum and maximum values
-    DeleteMin(&Mango);
-    DeleteMax(&Mango);
+  // Delete the minimum and maximum values
+  DeleteMin(&Mango);
+  DeleteMax(&Mango);
 
-    // Delete a specific node
-    Delete(&Mango, 14);
+  // Delete a specific node
+  Delete(&Mango, 14);
 
-    // Display the BST after deletions
-    printf("Inorder after deletions:\n");
-    Inorder(Mango);
-    printf("\n");
+  // Display the BST after deletions
+  printf("Inorder after deletions:\n");
+  Inorder(Mango);
+  printf("\n");
 
-    return 0;
+  // Free all remaining nodes
+  FreeBST(Mango);
+
+  return 0;
 }
 
 // Initialize the BST
 void Init(BST *main) {
-    *main = NULL;  // Set the main BST pointer to NULL
-    printf("Initialized BST.\n");
+  *main = NULL;  // Set the main BST pointer to NULL
+  printf("Initialized BST.\n");
 }
 
 // Insert a new value into the BST
 void Insert(int newData, BST *main) {
-    BST *trav;  // Pointer to traverse the tree
-    BST newNode = (BST)malloc(sizeof(struct node)); // Create new node
+  BST *trav;  // Pointer to traverse the tree
+  BST newNode = (BST)malloc(sizeof(struct node)); // Create new node
 
-    if (newNode != NULL) {
-        newNode->LC = newNode->RC = NULL; // Initialize left and right children
-        newNode->elem = newData; // Set the element
+  if (newNode != NULL) {
+      newNode->LC = newNode->RC = NULL; // Initialize left and right children
+      newNode->elem = newData; // Set the element
 
-        // Find the correct location to insert the new node
-        for (trav = main; *trav != NULL; trav = (newData < (*trav)->elem) ? &(*trav)->LC : &(*trav)->RC) {}
+      // Find the correct location to insert the new node
+      for (trav = main; *trav != NULL; trav = (newData < (*trav)->elem) ? &(*trav)->LC : &(*trav)->RC) {}
 
-        *trav = newNode; // Insert the new node at the found location
-        printf("Inserted %d successfully.\n", newData);
-    }
+      *trav = newNode; // Insert the new node at the found location
+      printf("Inserted %d successfully.\n", newData);
+  }
 }
 
 // Preorder traversal of the BST
 void Preorder(BST main) {
-    if (main != NULL) {
-        printf("%d ", main->elem); // Visit the root
-        Preorder(main->LC); // Traverse left
-        Preorder(main->RC); // Traverse right
-    }
+  if (main != NULL) {
+      printf("%d ", main->elem); // Visit the root
+      Preorder(main->LC); // Traverse left
+      Preorder(main->RC); // Traverse right
+  }
 }
 
 // Inorder traversal of the BST
 void Inorder(BST main) {
-    if (main != NULL) {
-        Inorder(main->LC); // Traverse left
-        printf("%d ", main->elem); // Visit the root
-        Inorder(main->RC); // Traverse right
-    }
+  if (main != NULL) {
+      Inorder(main->LC); // Traverse left
+      printf("%d ", main->elem); // Visit the root
+      Inorder(main->RC); // Traverse right
+  }
 }
 
 // Postorder traversal of the BST
 void Postorder(BST main) {
-    if (main != NULL) {
-        Postorder(main->LC); // Traverse left
-        Postorder(main->RC); // Traverse right
-        printf("%d ", main->elem); // Visit the root
-    }
+  if (main != NULL) {
+      Postorder(main->LC); // Traverse left
+      Postorder(main->RC); // Traverse right
+      printf("%d ", main->elem); // Visit the root
+  }
 }
 
 // Check if a value exists in the BST
 bool Member(int findMe, BST main) {
-    while (main != NULL && main->elem != findMe) {
-        main = (findMe < main->elem) ? main->LC : main->RC; // Traverse the tree
-    }
-    return (main != NULL); // Return true if found, false otherwise
+  while (main != NULL && main->elem != findMe) {
+      main = (findMe < main->elem) ? main->LC : main->RC; // Traverse the tree
+  }
+  return (main != NULL); // Return true if found, false otherwise
 }
 
 // Delete the minimum value from the BST
 void DeleteMin(BST *main) {
-    BST *trav = main;
-    while ((*trav)->LC != NULL) { // Traverse to the leftmost node
-        trav = &(*trav)->LC;
-    }
-    // Get the node to delete and adjust pointers
-    BST temp = *trav;
-    *trav = (*trav)->RC; // Remove the node
-    free(temp); // Free memory
-    printf("Deleted min of BST.\n");
+  if (*main == NULL) return; // Empty tree, nothing to delete
+
+  BST *trav = main;
+  while ((*trav)->LC != NULL) { // Traverse to the leftmost node
+      trav = &(*trav)->LC;
+  }
+  BST temp = *trav;
+  *trav = (*trav)->RC; // Remove the node
+  free(temp); // Free memory
+  printf("Deleted min of BST.\n");
 }
 
 // Delete the maximum value from the BST
 void DeleteMax(BST *main) {
-    BST *trav = main;
-    while ((*trav)->RC != NULL) { // Traverse to the rightmost node
-        trav = &(*trav)->RC;
-    }
-    // Get the node to delete and adjust pointers
-    BST temp = *trav;
-    *trav = (*trav)->LC; // Remove the node
-    free(temp); // Free memory
-    printf("Deleted max of BST.\n");
+  if (*main == NULL) return; // Empty tree, nothing to delete
+
+  BST *trav = main;
+  while ((*trav)->RC != NULL) { // Traverse to the rightmost node
+      trav = &(*trav)->RC;
+  }
+  BST temp = *trav;
+  *trav = (*trav)->LC; // Remove the node
+  free(temp); // Free memory
+  printf("Deleted max of BST.\n");
 }
 
 // Delete a specific node from the BST
 void Delete(BST *main, int node) {
-    if (*main == NULL) {
-        printf("Node %d not found for deletion.\n", node);
-        return; // Node not found
-    }
-    if (node < (*main)->elem) { // Node to delete is in the left subtree
-        Delete(&(*main)->LC, node);
-    } else if (node > (*main)->elem) { // Node to delete is in the right subtree
-        Delete(&(*main)->RC, node);
-    } else { // Node found
-        BST temp = *main;
+  if (*main == NULL) {
+      printf("Node %d not found for deletion.\n", node);
+      return; // Node not found
+  }
 
-        // Case 1: No children
-        if (temp->LC == NULL && temp->RC == NULL) {
-            *main = NULL; // Remove the node
-        }
-        // Case 2: One child
-        else if (temp->LC == NULL) {
-            *main = temp->RC; // Replace with right child
-        } else if (temp->RC == NULL) {
-            *main = temp->LC; // Replace with left child
-        }
-        // Case 3: Two children
-        else {
-            // Find the in-order successor (smallest in the right subtree)
-            BST successor = temp->RC;
-            while (successor->LC != NULL) {
-                successor = successor->LC;
-            }
-            temp->elem = successor->elem; // Replace value with successor's value
-            Delete(&temp->RC, successor->elem); // Delete the successor
-        }
-        free(temp); // Free the memory of the deleted node
-        printf("Deleted node %d from BST.\n", node);
+  if (node < (*main)->elem) { // Node to delete is in the left subtree
+      Delete(&(*main)->LC, node);
+  } else if (node > (*main)->elem) { // Node to delete is in the right subtree
+      Delete(&(*main)->RC, node);
+  } else { // Node found
+      BST temp = *main;
+
+      // Case 1: No children
+      if (temp->LC == NULL && temp->RC == NULL) {
+          *main = NULL; // Remove the node
+          free(temp);
+      }
+      // Case 2: One child
+      else if (temp->LC == NULL) {
+          *main = temp->RC; // Replace with right child
+          free(temp);
+      } else if (temp->RC == NULL) {
+          *main = temp->LC; // Replace with left child
+          free(temp);
+      }
+      // Case 3: Two children
+      else {
+          // Find the in-order successor (smallest in the right subtree)
+          BST successor = temp->RC;
+          while (successor->LC != NULL) {
+              successor = successor->LC;
+          }
+          temp->elem = successor->elem; // Replace value with successor's value
+          Delete(&temp->RC, successor->elem); // Delete the successor recursively
+          // Memory of successor handled in recursive call
+      }
+      printf("Deleted node %d from BST.\n", node);
+  }
+}
+
+// Free the entire BST to prevent memory leaks
+void FreeBST(BST main) {
+    if (main != NULL) {
+        FreeBST(main->LC);
+        FreeBST(main->RC);
+        free(main);
     }
 }
+
 ```
 
   
