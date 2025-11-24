@@ -608,4 +608,130 @@ void Delete(BST *main, int node) {
 }
 ```
 
-  
+# Iterative Method InSERT
+Without Trav
+```c
+void Insert(Node** T, int key){
+    Node *t = *T, *r = NULL;
+
+    // search for correct position
+    while(t != NULL){
+        r = t;
+        if(key == t->data) return; // no duplicates
+        else if(key < t->data)
+            t = t->leftchild;
+        else
+            t = t->rightchild;
+    }
+
+    // Create the new node
+    Node* P = (Node*)malloc(sizeof(Node));
+    P->data = key;
+    P->leftchild = P->rightchild = NULL;
+
+    // Attach new node
+    if(r == NULL)      // tree was empty
+        *T = P;
+    else if(key < r->data)
+        r->leftchild = P;
+    else
+        r->rightchild = P;
+}
+
+```
+With Trav
+```c
+void Insert(Node** T, int key) {
+    Node **trav = T;
+
+    // Walk down the tree by updating trav to point to left/right child pointer
+    while (*trav != NULL) {
+        if (key == (*trav)->data)
+            return; // no duplicates
+
+        else if (key < (*trav)->data)
+            trav = &((*trav)->leftchild);
+        else
+            trav = &((*trav)->rightchild);
+    }
+
+    // Allocate new node
+    Node* P = (Node*)malloc(sizeof(Node));
+    P->data = key;
+    P->leftchild = P->rightchild = NULL;
+
+    // Attach directly using trav
+    *trav = P;
+}
+
+```
+# Search Iterative
+```c
+Node* Search(Node* root, int key) {
+    Node* t = root;
+
+    while (t != NULL) {
+        if (key == t->data)
+            return t;
+        else if (key < t->data)
+            t = t->leftchild;
+        else
+            t = t->rightchild;
+    }
+
+    return NULL;
+}
+
+```
+# Delete iterative
+```c
+void Delete(Node** T, int key) {
+    Node **trav = T;
+    Node *temp, *succ, *succParent;
+
+    // Search for the node using pointer-to-pointer
+    while (*trav != NULL && (*trav)->data != key) {
+        if (key < (*trav)->data)
+            trav = &((*trav)->leftchild);
+        else
+            trav = &((*trav)->rightchild);
+    }
+
+    if (*trav == NULL)
+        return; // key not found
+
+    // Case 1: node has at most one child
+    if ((*trav)->leftchild == NULL || (*trav)->rightchild == NULL) {
+
+        temp = *trav;
+        if ((*trav)->leftchild != NULL)
+            *trav = (*trav)->leftchild;
+        else
+            *trav = (*trav)->rightchild;
+
+        free(temp);
+    }
+    else {
+        // Case 2: node has two children → find inorder successor
+        succParent = *trav;
+        succ = (*trav)->rightchild;
+
+        while (succ->leftchild != NULL) {
+            succParent = succ;
+            succ = succ->leftchild;
+        }
+
+        // Copy successor data
+        (*trav)->data = succ->data;
+
+        // Delete successor node (which has at most 1 child)
+        if (succParent->leftchild == succ)
+            succParent->leftchild = succ->rightchild;
+        else
+            succParent->rightchild = succ->rightchild;
+
+        free(succ);
+    }
+}
+
+```
