@@ -120,3 +120,126 @@ int main() {
 }
 
 ```
+
+# MAX HEAP
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 15
+
+typedef struct heap {
+    int elem[MAX];
+    int count;
+} Heap;
+
+// Initialize heap
+void Initialize(Heap *h) {
+    h->count = 0;
+    printf("==========================\n");
+    printf("Initialized the MaxHeap.\n");
+    printf("==========================\n");
+}
+
+// Display heap
+void Display(Heap h) {
+    printf("{");
+    for (int i = 0; i < h.count; i++) {
+        printf("%d%c", h.elem[i], (i == h.count - 1) ? '}' : ',');
+    }
+    printf("\n");
+}
+
+// Populate heap from array
+void Populate(Heap *h, int values[], int size) {
+    for (int i = 0; i < size; i++) {
+        h->elem[i] = values[i];
+        h->count++;
+    }
+    printf("Populated the MaxHeap.\n");
+    printf("==========================\n");
+}
+
+// Insert a new element into MaxHeap
+void InsertMax(Heap *h, int newData) {
+    if (h->count >= MAX) {
+        printf("Heap is full.\n");
+        return;
+    }
+
+    int child = h->count++;
+    int parent = (child - 1) / 2;
+    h->elem[child] = newData;
+
+    while (parent >= 0 && h->elem[parent] < h->elem[child]) {
+        int temp = h->elem[parent];
+        h->elem[parent] = h->elem[child];
+        h->elem[child] = temp;
+
+        child = parent;
+        parent = (child - 1) / 2;
+    }
+    printf("Successfully inserted %d into MaxHeap!\n", newData);
+}
+
+// Heapify subtree rooted at parent
+void HeapifyMax(Heap *h, int parent) {
+    int LC = 2 * parent + 1;
+    int RC = 2 * parent + 2;
+    int largest = parent;
+
+    if (LC < h->count && h->elem[LC] > h->elem[largest]) largest = LC;
+    if (RC < h->count && h->elem[RC] > h->elem[largest]) largest = RC;
+
+    if (largest != parent) {
+        int temp = h->elem[parent];
+        h->elem[parent] = h->elem[largest];
+        h->elem[largest] = temp;
+        HeapifyMax(h, largest);
+    }
+}
+
+// Build MaxHeap from any array
+void BuildMaxHeap(Heap *h) {
+    for (int parent = (h->count - 2) / 2; parent >= 0; parent--) {
+        HeapifyMax(h, parent);
+    }
+    printf("MaxHeap built successfully.\n");
+}
+
+// Preorder traversal
+void Preorder(Heap h, int index) {
+    if (index < h.count) {
+        printf("%d ", h.elem[index]);
+        Preorder(h, 2 * index + 1);
+        Preorder(h, 2 * index + 2);
+    }
+}
+
+int main() {
+    int values[] = {6, 7, 4, 3, 1, 2, 5, 8};
+    int n = sizeof(values) / sizeof(values[0]);
+
+    Heap harryPOTter;
+    Initialize(&harryPOTter);
+    Populate(&harryPOTter, values, n);
+
+    printf("Initial heap array:\n");
+    Display(harryPOTter);
+
+    InsertMax(&harryPOTter, 10);
+    printf("After inserting 10:\n");
+    Display(harryPOTter);
+
+    BuildMaxHeap(&harryPOTter);
+    printf("After building MaxHeap:\n");
+    Display(harryPOTter);
+
+    printf("Preorder traversal: ");
+    Preorder(harryPOTter, 0);
+    printf("\n");
+
+    return 0;
+}
+
+```
