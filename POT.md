@@ -271,4 +271,20 @@ BuildMinHeap(h) calls MinHeapify for all non-leaf nodes from bottom to top, ensu
 # Insert
 Insert fixes the heap from the new element upward (percolate up).
 
+# 1️⃣ Heapify fixes only one subtree
 
+Suppose you call Heapify (or MinHeapify/MaxHeapify) at one node.
+
+It only ensures the heap property for that node and its descendants.
+
+It does not automatically fix other parts of the heap that might be invalid above it.
+
+Think of it like pushing the wrong node down the tree until its subtree is correct.
+
+# 2️⃣ BuildHeap calls heapify from bottom to top
+
+When you first build a heap from an array, some elements may already satisfy the heap property, but parents may violate it.
+
+So BuildHeap calls Heapify on all non-leaf nodes, starting from the last parent and moving up to the root.
+
+This ensures the entire array becomes a valid heap.
