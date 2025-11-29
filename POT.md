@@ -243,3 +243,32 @@ int main() {
 }
 
 ```
+# Heapsort
+Example (Ascending Order using Max-Heap)
+
+Array: [4, 10, 3, 5, 1]
+
+Build max-heap → [10, 5, 3, 4, 1]
+
+Swap root with last element → [1, 5, 3, 4, 10]
+
+Heapify root → [5, 4, 3, 1, 10]
+
+Swap root with last element → [1, 4, 3, 5, 10]
+
+Heapify root → [4, 1, 3, 5, 10]
+
+Continue until heap size = 1
+
+Final sorted array: [1, 3, 4, 5, 10]
+
+# MinHeapify
+MinHeapify(h, i) fixes the heap from node i downward.
+
+# BuildMinHeap
+BuildMinHeap(h) calls MinHeapify for all non-leaf nodes from bottom to top, ensuring the entire array becomes a heap.
+
+# Insert
+Insert fixes the heap from the new element upward (percolate up).
+
+
