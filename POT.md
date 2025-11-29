@@ -288,3 +288,10 @@ When you first build a heap from an array, some elements may already satisfy the
 So BuildHeap calls Heapify on all non-leaf nodes, starting from the last parent and moving up to the root.
 
 This ensures the entire array becomes a valid heap.
+
+# ✅ Analogy
+Heapify(node) = make sure the box at this level is correctly placed relative to the boxes below it.
+
+BuildHeap = start from the bottom rows and fix each box upward so the whole pyramid is stable.
+
+HeapSort = repeatedly remove the top box, replace it with the last box, and fix the pyramid again.
