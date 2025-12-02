@@ -201,7 +201,7 @@ void HeapifyMax(Heap *h, int parent) {
 
 // Build MaxHeap from any array
 void BuildMaxHeap(Heap *h) {
-    for (int parent = (h->count - 2) / 2; parent >= 0; parent--) {
+    for (int parent = (h->count - 1) / 2; parent >= 0; parent--) {
         HeapifyMax(h, parent);
     }
     printf("MaxHeap built successfully.\n");
