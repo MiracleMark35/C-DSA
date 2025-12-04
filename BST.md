@@ -755,3 +755,199 @@ void Delete(Node** T, int key) {
 }
 
 ```
+# CodeChum EXERCISE
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 100
+
+
+
+typedef struct node {
+	char* key;
+	struct node* LC;
+	struct node* RC;
+} Node,*BST;
+
+
+void insert(BST* tree, const char *key_data){
+    // // recursive
+    // if(strlen(key_data) <= MAX){
+    
+    // if(*tree == NULL){
+    //     BST newNode = malloc(sizeof(Node));
+    //     // (*tree)->key = malloc(strlen(key_data) + 1);
+    //     // strcpy((*tree)->key, key_data); 
+    //     newNode->key = strdup(key_data);
+    //     newNode->LC = NULL;
+    //     newNode->RC = NULL;
+    //     *tree = newNode;
+    //  //   return;
+    // }else{
+        
+    //     if(strcmp(key_data, (*tree)->key) < 0){
+    //         insert(&(*tree)->LC, key_data);
+    //     }else if(strcmp(key_data, (*tree)->key) > 0){
+    //          insert(&(*tree)->RC, key_data);
+    //     }
+    // }
+    // }
+    
+    //iterative
+           BST* trav = tree;
+           
+           while(*trav != NULL){
+               
+           int cmp = strcmp( key_data, (*trav)->key);
+           
+           if(cmp == 0) return;
+           
+           if(cmp < 0){
+               trav = &(*trav)->LC;
+           }else{
+                trav = &(*trav)->RC;
+           }
+           
+           }
+             BST newNode = malloc(sizeof(Node));
+            newNode->key = malloc(strlen(key_data) + 1);
+            strcpy(newNode->key, key_data); 
+            // newNode->key = strdup(key_data);
+            newNode->LC = NULL;
+            newNode->RC = NULL;
+             *trav = newNode;
+       
+    
+    
+}
+
+void inorderTraversal(BST tree){
+
+    BST stack[MAX]; // make stack
+    
+    int top = -1; // make top -1
+    
+    BST trav = tree; // trav ciurernt // sorted order
+    
+    while(trav != NULL || top != -1){  //two conditons
+        while(trav != NULL){ //push all the lefft child until none left
+            top++;
+            stack[top] = trav;
+            trav = trav->LC;
+        }
+         // human kung wala nay lc
+        trav = stack[top--]; // start poppping
+        printf("%s\n", trav->key); // print
+        
+        trav = trav->RC;  // go toRC napud
+    }
+    
+    
+}
+
+void preorderTraversal(BST tree){
+    // recursive
+    
+    BST stack[MAX]; // make stack
+    
+    int top = -1; // make top
+    
+   stack[++top] = tree; // apply the rrot directlye
+   
+    while( top != -1){  // wile top != -1 // until the stack is empty
+       BST node = stack[top--]; // node 1 is the root wilwee be popped first 
+        printf("%s\n", node->key);
+        
+      if(node->RC) {
+          stack[++top] = node->RC;
+      }
+      if(node->LC) {
+          stack[++top] = node->LC;
+      }
+    }
+    
+}
+
+
+void postorderTraversal(BST tree){
+   
+   BST stack1[MAX]; // make two
+    BST stack2[MAX];
+   int top1 = -1;
+   int top2 = -1;
+   
+   // take the root in stack1
+   
+   stack1[++top1] = tree;
+   
+   while(top1 != -1){
+       
+       BST node = stack1[top1--]; 
+       
+       stack2[++top2] = node;
+        
+        
+       if(node->LC){
+            stack1[++top1] = node->LC;
+       }
+       
+       if(node->RC){
+           stack1[++top1] = node->RC;
+       }
+      
+   }
+   
+   while(top2 != -1){
+       printf("%s\n", stack2[top2--]->key);
+   }
+   
+   
+   
+}
+
+void destroyTree(BST tree){
+    if(tree != NULL){
+        destroyTree(tree->LC);
+        destroyTree(tree->RC);
+        
+        if(tree->key != NULL){
+            free(tree->key);
+        }
+        
+        free(tree);
+    }
+}
+
+int main(){
+    
+    
+    BST myTree = NULL;
+    
+    insert(&myTree, "Mango");
+    insert(&myTree, "Apple");
+    insert(&myTree, "Pineapple");
+    insert(&myTree, "Banana");
+    insert(&myTree, "Grape");
+    insert(&myTree, "Orange");
+    insert(&myTree, "Kiwi");
+    
+    // test duplicate
+    insert(&myTree, "Mango");
+    
+    printf("INORDER:\n");
+    inorderTraversal(myTree);
+    printf("\n");
+    printf("PREORDER:\n");
+    preorderTraversal(myTree);
+    printf("\n");
+    printf("PostORDER:\n");
+    postorderTraversal(myTree);
+    printf("\n");
+     destroyTree(myTree);
+}
+
+
+```
