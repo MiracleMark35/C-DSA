@@ -1,25 +1,18 @@
 # Closed Hashing
 
 ```c
-// Hash Tables (Closed Hashing)
-
 #include <stdio.h>
 #include <stdbool.h>
 
 #define MAX 10
-#define EMPTY   '~'
-#define DELETED '!'
+#define EMPTY   -1
+#define DELETED -2
 
-typedef char Dictionary[MAX];
+typedef int Dictionary[MAX];
 
-// Hash Function (Hard Coded)
-int hashBrown(char c) {
-    char elements[MAX] = { "abcdefghij" };
-    int hash[MAX] = { 3, 9, 4, 3, 9, 0, 1, 3, 0, 3 };
-
-    int i;
-    for (i = 0; i < MAX && elements[i] != c; i++) {}
-    return hash[i];
+// Hash Function: key % MAX
+int hashFunction(int key) {
+    return key % MAX;
 }
 
 // Initialize Dictionary
@@ -39,56 +32,92 @@ void displayDict(Dictionary D) {
         } else if (D[i] == DELETED) {
             printf("DELETED");
         } else {
-            printf("%c", D[i]);
+            printf("%d", D[i]);
         }
     }
     printf("\n");
 }
 
-// isMember Dictionary
-bool isMember(Dictionary D, char elem) {
-    int i = hashBrown(elem), sl;
-    for (sl = 1; sl != MAX && D[i] != elem && D[i] != EMPTY; 
-         i = (i + 1) % MAX, sl++) {}
+// Search (isMember)
+bool isMember(Dictionary D, int key) {
+    int i = hashFunction(key);
+    int sl;
+    for (sl = 1; sl <= MAX && D[i] != key && D[i] != EMPTY; i = (i + 1) % MAX, sl++) {}
 
-    printf("\n\tThe search length is %d\n", sl);
-    return sl != MAX;
+    printf("\n\tSearch length for %d is %d\n", key, sl);
+    return (sl <= MAX && D[i] == key);
 }
 
-// Insertion Dictionary
-void insertUnique(Dictionary D, char elem) {
-    int i = hashBrown(elem), sl;
-    for (sl = 1; sl != MAX && D[i] != elem && D[i] != EMPTY && D[i] != DELETED; 
+// Insert Unique
+void insertUnique(Dictionary D, int key) {
+    int i = hashFunction(key);
+    int sl;
+    for (sl = 1; sl <= MAX && D[i] != key && D[i] != EMPTY && D[i] != DELETED;
          i = (i + 1) % MAX, sl++) {}
 
-    if (sl != MAX && D[i] != elem) {
-        D[i] = elem;
+    if (sl <= MAX && D[i] != key) {
+        D[i] = key;
     } else {
-        printf("\t%c is already in the dictionary\n", elem);
+        printf("\t%d is already in the dictionary or table is full\n", key);
     }
 }
 
-// Deletion Dictionary
-void deleteMember(Dictionary D, char elem) {
-    int i = hashBrown(elem), sl;
-    for (sl = 1; sl != MAX && D[i] != elem && (D[i] != EMPTY || D[i] != DELETED); 
-         i = (i + 1) % MAX, sl++) {}
+// Delete Member
+void deleteMember(Dictionary D, int key) {
+    int i = hashFunction(key);
+    int sl;
+    for (sl = 1; sl <= MAX && D[i] != key && D[i] != EMPTY; i = (i + 1) % MAX, sl++) {}
 
-    if (sl != MAX && D[i] == elem) {
+    if (sl <= MAX && D[i] == key) {
         D[i] = DELETED;
+        printf("\t%d deleted\n", key);
     } else {
-        printf("\t%c is not found\n", elem);
+        printf("\t%d not found\n", key);
     }
 }
 
 // Get Search Length
-int getSearchLength(Dictionary D, char elem) {
-    int i = hashBrown(elem), sl;
-    for (sl = 1; sl != MAX && D[i] != elem && D[i] != EMPTY; 
-         i = (i + 1) % MAX, sl++) {}
-
+int getSearchLength(Dictionary D, int key) {
+    int i = hashFunction(key);
+    int sl;
+    for (sl = 1; sl <= MAX && D[i] != key && D[i] != EMPTY; i = (i + 1) % MAX, sl++) {}
     return sl;
 }
+
+// =========================
+// MAIN PROGRAM
+// =========================
+int main() {
+    Dictionary D;
+    initDictionary(D);
+
+    printf("Initial Dictionary:");
+    displayDict(D);
+
+    printf("\nInserting elements...\n");
+    insertUnique(D, 15);
+    insertUnique(D, 25);
+    insertUnique(D, 35);
+    insertUnique(D, 5);
+    insertUnique(D, 15); // duplicate
+
+    displayDict(D);
+
+    printf("\nSearching elements...\n");
+    isMember(D, 25);
+    isMember(D, 99); // not found
+
+    printf("\nDeleting elements...\n");
+    deleteMember(D, 25);
+    deleteMember(D, 99); // not found
+
+    displayDict(D);
+
+    printf("\nSearch length of 35 = %d\n", getSearchLength(D, 35));
+
+    return 0;
+}
+
 
 ```
 
